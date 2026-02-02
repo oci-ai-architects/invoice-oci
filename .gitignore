@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+package-lock.json
+
+# OCI
+.oci/
+oci_api_key*.pem
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+!example.tfvars
+
+# Functions
+.fn/
+func.yaml.bak
+
+# Build outputs
+dist/
+build/
+.next/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Secrets (never commit)
+*.pem
+*.key
+secrets/
+credentials/
