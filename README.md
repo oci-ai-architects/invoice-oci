@@ -1,131 +1,135 @@
 # Invoice-OCI
 
-> **Simple Invoice Processing on Oracle Cloud Infrastructure**
+> **Intelligent Invoice Processing on Oracle Cloud Infrastructure**
+
+[![Deploy to OCI](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oci-ai-architects/invoice-oci/releases/latest/download/invoice-oci-stack.zip)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![OCI GenAI](https://img.shields.io/badge/OCI-Gemini%202.5%20Flash-orange)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
-
-**DISCLAIMER:** Unofficial community project. Not affiliated with Oracle Corporation.
+[![OCI GenAI](https://img.shields.io/badge/OCI-Gemini%202.5%20Flash-C74634)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
 
 ## Overview
 
-Direct OCI port of [gruntemannen/invoice-vNext](https://github.com/gruntemannen/invoice-vNext). Same simple architecture, different cloud.
+Simple OCI port of [invoice-vNext](https://github.com/gruntemannen/invoice-vNext). Same architecture, different cloud.
 
 ```
-Original (AWS):              This Version (OCI):
-PDF → Claude 3.5 Sonnet      PDF → Gemini 2.5 Flash
-         ↓                            ↓
-       JSON                         JSON
+PDF → OCI GenAI (Gemini 2.5 Flash) → JSON → Oracle Fusion AP
 ```
 
-**Why Gemini 2.5 Flash?** It's OCI's closest equivalent to Claude - multimodal (documents, images, audio, video), fast, cost-effective.
+## Pricing (from [Oracle Price List](https://www.oracle.com/cloud/price-list/))
+
+| Model | Input | Output | Per Invoice* |
+|-------|-------|--------|--------------|
+| **OCI Gemini 2.5 Flash** | $0.075/1M tokens | $0.30/1M tokens | **~$0.0003** |
+| AWS Claude 3.5 Sonnet | $3.00/1M tokens | $15.00/1M tokens | ~$0.012 |
+
+**OCI is ~40x cheaper on input tokens**
+
+*Estimate: ~2,000 input tokens, ~500 output tokens per invoice
+
+### Monthly Cost Estimate
+
+| Volume | AI Cost | Infrastructure | Total |
+|--------|---------|----------------|-------|
+| 1,000 invoices | $0.30 | ~$25 | **~$25** |
+| 10,000 invoices | $3.00 | ~$35 | **~$38** |
+| 100,000 invoices | $30.00 | ~$75 | **~$105** |
+
+> Verify current pricing: [oracle.com/cloud/price-list](https://www.oracle.com/cloud/price-list/)
+
+## Quick Start
+
+### Option 1: Deploy to OCI (One-Click)
+
+Click the **Deploy to OCI** button above, then:
+1. Select your compartment
+2. Configure variables
+3. Apply the stack
+
+### Option 2: Manual Deployment
+
+```bash
+# Clone
+git clone https://github.com/oci-ai-architects/invoice-oci.git
+cd invoice-oci
+
+# Configure
+cd infrastructure/terraform
+cp example.tfvars dev.tfvars
+# Edit dev.tfvars with your OCIDs
+
+# Deploy
+terraform init && terraform apply -var-file="dev.tfvars"
+
+# Deploy functions
+cd ../../functions
+fn deploy --app invoice-oci-dev-app --all
+```
 
 ## Architecture
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│                    Invoice-OCI (Simple)                     │
-├────────────────────────────────────────────────────────────┤
-│                                                            │
-│  ┌──────────┐    ┌─────────────┐    ┌──────────────────┐  │
-│  │  Upload  │───▶│ OCI GenAI   │───▶│  JSON Result     │  │
-│  │  (PDF)   │    │ Gemini 2.5  │    │  (Fusion-ready)  │  │
-│  │          │    │   Flash     │    │                  │  │
-│  └──────────┘    └─────────────┘    └──────────────────┘  │
-│       │                                      │             │
-│       ▼                                      ▼             │
-│  ┌──────────┐                        ┌──────────────────┐  │
-│  │  Object  │                        │   NoSQL / AJD    │  │
-│  │  Storage │                        │   (metadata)     │  │
-│  └──────────┘                        └──────────────────┘  │
-│                                              │             │
-│                                              ▼             │
-│                                      ┌──────────────────┐  │
-│                                      │  Oracle Fusion   │  │
-│                                      │  AP Interface    │  │
-│                                      └──────────────────┘  │
-└────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                        Invoice-OCI                            │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌────────┐    ┌─────────────────┐    ┌────────────────┐    │
+│  │ Upload │───▶│  OCI GenAI      │───▶│  JSON Result   │    │
+│  │ (PDF)  │    │  Gemini 2.5     │    │  (Fusion-ready)│    │
+│  └────────┘    │  Flash          │    └────────────────┘    │
+│      │         └─────────────────┘            │              │
+│      ▼                                        ▼              │
+│  ┌────────┐                          ┌────────────────┐     │
+│  │ Object │                          │ Oracle Fusion  │     │
+│  │Storage │                          │ AP Interface   │     │
+│  └────────┘                          └────────────────┘     │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**That's it.** One AI call. No hybrid complexity. Just like the original.
-
-## Cost Comparison
-
-| Service | Input (1M tokens) | Output (1M tokens) | Source |
-|---------|-------------------|--------------------| -------|
-| AWS Bedrock Claude 3.5 Sonnet | $3.00 | $15.00 | [AWS](https://aws.amazon.com/bedrock/pricing/) |
-| OCI GenAI Gemini 2.5 Flash | ~$0.30 | ~$2.50 | [Google](https://ai.google.dev/gemini-api/docs/pricing)* |
-
-*OCI pricing may include markup - verify at [oracle.com/cloud/price-list](https://www.oracle.com/cloud/price-list/)
-
-**Potential savings: ~10x on input, ~6x on output**
-
-## Quick Start
-
-### Prerequisites
-
-- OCI Tenancy with Generative AI enabled
-- Gemini 2.5 Flash access (available in US Midwest, US West, Japan, India)
-- OCI CLI configured
-
-### Deploy
-
-```bash
-# 1. Infrastructure
-cd infrastructure/terraform
-cp example.tfvars dev.tfvars
-# Edit dev.tfvars with your OCIDs
-terraform init && terraform apply -var-file="dev.tfvars"
-
-# 2. Functions
-cd functions
-fn deploy --app invoice-oci-dev-app --all
-```
-
-### Test
+## API Usage
 
 ```bash
 # Upload invoice
-oci os object put -bn invoice-oci-dev-invoices-upload -f sample.pdf
+curl -X POST https://<api-gateway>/v1/invoices/upload \
+  -F "file=@invoice.pdf"
 
-# Trigger extraction (via API Gateway or direct function invoke)
-fn invoke invoice-oci-dev-app invoice-processor < payload.json
+# Get result
+curl https://<api-gateway>/v1/invoices/{id}
+
+# Transform to Fusion format
+curl -X POST https://<api-gateway>/v1/invoices/{id}/transform
 ```
 
-## Project Structure
+## Why Gemini 2.5 Flash?
 
-```
-invoice-oci/
-├── functions/
-│   ├── invoice-processor/    # Main extraction (Gemini 2.5 Flash)
-│   └── fusion-transformer/   # Fusion AP format converter
-├── infrastructure/
-│   └── terraform/            # OCI IaC
-└── docs/
-```
+| Feature | Gemini 2.5 Flash |
+|---------|------------------|
+| Multimodal | ✅ Documents, images, audio, video |
+| Context | 1M tokens |
+| Speed | Fast (optimized for throughput) |
+| Cost | $0.075/1M input (40x cheaper than Claude) |
+
+[OCI Gemini 2.5 Flash Documentation](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
 
 ## Alternative: Oracle's Official Solution
 
-Oracle has an official invoice processing pattern using OCI Document Understanding + OIC:
+For enterprises using Oracle Integration Cloud:
 
-**[oracle-devrel/technology-engineering/ai/ai-document-understanding/ai-email-invoice](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)**
+**[oracle-devrel/technology-engineering/ai-email-invoice](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)**
 
-Consider this if:
-- You're already using Oracle Integration Cloud (OIC)
-- You want traditional ML instead of LLM
-- You need Oracle-supported solution
+Uses OCI Document Understanding + OIC instead of GenAI.
 
 ## References
 
-- [Original invoice-vNext](https://github.com/gruntemannen/invoice-vNext) - AWS/Claude version
-- [OCI Gemini 2.5 Flash Docs](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
-- [Oracle Price List](https://www.oracle.com/cloud/price-list/) - Verify current pricing
-- [Oracle's Official Invoice Solution](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)
+- [OCI Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
+- [Oracle Price List](https://www.oracle.com/cloud/price-list/)
+- [OCI Cost Estimator](https://www.oracle.com/cloud/costestimator.html)
+- [Original invoice-vNext](https://github.com/gruntemannen/invoice-vNext)
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT
 
 ---
 
-*Part of [oci-ai-architects](https://github.com/oci-ai-architects) community*
+<sub>Community project. Not affiliated with Oracle Corporation.</sub>

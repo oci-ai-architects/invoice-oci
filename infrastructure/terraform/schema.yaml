@@ -1,0 +1,92 @@
+# OCI Resource Manager Stack Schema
+# This file enables the "Deploy to OCI" button functionality
+
+title: "Invoice-OCI Stack"
+description: "Intelligent Invoice Processing with OCI GenAI Gemini 2.5 Flash"
+schemaVersion: 1.1.0
+version: "1.0.0"
+locale: "en"
+
+logoUrl: "https://objectstorage.us-phoenix-1.oraclecloud.com/n/oracleidentitycloudservice/b/icons/o/oci-icon.png"
+
+variableGroups:
+  - title: "Required Configuration"
+    visible: true
+    variables:
+      - compartment_ocid
+      - region
+
+  - title: "Optional Configuration"
+    visible: true
+    variables:
+      - project_name
+      - environment
+
+  - title: "Hidden"
+    visible: false
+    variables:
+      - tenancy_ocid
+      - current_user_ocid
+
+variables:
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    title: "Compartment"
+    description: "Select the compartment where resources will be created"
+    required: true
+
+  region:
+    type: oci:identity:region:name
+    title: "Region"
+    description: "Select the region (must support OCI GenAI with Gemini)"
+    required: true
+    default: "us-chicago-1"
+
+  project_name:
+    type: string
+    title: "Project Name"
+    description: "Name prefix for all resources"
+    default: "invoice-oci"
+    required: false
+
+  environment:
+    type: enum
+    title: "Environment"
+    description: "Deployment environment"
+    enum:
+      - "dev"
+      - "staging"
+      - "prod"
+    default: "dev"
+    required: false
+
+  tenancy_ocid:
+    type: string
+    visible: false
+
+  current_user_ocid:
+    type: string
+    visible: false
+
+outputs:
+  api_gateway_endpoint:
+    title: "API Gateway URL"
+    type: link
+    visible: true
+
+  upload_bucket:
+    title: "Upload Bucket Name"
+    type: string
+    visible: true
+
+  function_app:
+    title: "Functions Application"
+    type: string
+    visible: true
+
+outputGroups:
+  - title: "Deployment Outputs"
+    outputs:
+      - api_gateway_endpoint
+      - upload_bucket
+      - function_app
