@@ -1,157 +1,131 @@
 # Invoice-OCI
 
-> **Intelligent Invoice Processing on Oracle Cloud Infrastructure**
+> **Simple Invoice Processing on Oracle Cloud Infrastructure**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![OCI](https://img.shields.io/badge/OCI-Document%20AI-red)](https://docs.oracle.com/en-us/iaas/Content/document-understanding/home.htm)
-[![OCI GenAI](https://img.shields.io/badge/OCI-Generative%20AI-orange)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
+[![OCI GenAI](https://img.shields.io/badge/OCI-Gemini%202.5%20Flash-orange)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
 
-**DISCLAIMER:** This is an unofficial community project. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle, OCI, and related marks are trademarks of Oracle Corporation.
+**DISCLAIMER:** Unofficial community project. Not affiliated with Oracle Corporation.
 
 ## Overview
 
-Enterprise-grade invoice extraction system built on Oracle Cloud Infrastructure, featuring a hybrid AI approach combining **OCI Document Understanding** for fast, deterministic extraction with **OCI Generative AI (Llama 3.2 Vision)** for complex edge cases.
+Direct OCI port of [gruntemannen/invoice-vNext](https://github.com/gruntemannen/invoice-vNext). Same simple architecture, different cloud.
 
-Adapted from [gruntemannen/invoice-vNext](https://github.com/gruntemannen/invoice-vNext) (AWS/Bedrock) for OCI-native deployment.
+```
+Original (AWS):              This Version (OCI):
+PDF → Claude 3.5 Sonnet      PDF → Gemini 2.5 Flash
+         ↓                            ↓
+       JSON                         JSON
+```
+
+**Why Gemini 2.5 Flash?** It's OCI's closest equivalent to Claude - multimodal (documents, images, audio, video), fast, cost-effective.
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Invoice-OCI Platform                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  ┌──────────┐    ┌─────────────┐    ┌────────────────────────┐  │
-│  │  Web UI  │───▶│ API Gateway │───▶│    OCI Functions       │  │
-│  │  (PWA)   │    │             │    │    (Orchestrator)      │  │
-│  └──────────┘    └─────────────┘    └───────────┬────────────┘  │
-│       │                                         │                │
-│       ▼                                         ▼                │
-│  ┌──────────┐              ┌─────────────────────────────────┐  │
-│  │  Object  │─────────────▶│      Hybrid AI Pipeline         │  │
-│  │ Storage  │              │  ┌─────────────────────────────┐│  │
-│  └──────────┘              │  │ OCI Document Understanding  ││  │
-│                            │  │ (Primary - 90% of docs)     ││  │
-│                            │  └──────────────┬──────────────┘│  │
-│                            │                 │ confidence    │  │
-│                            │                 │  < 85%        │  │
-│                            │                 ▼               │  │
-│                            │  ┌─────────────────────────────┐│  │
-│                            │  │ OCI GenAI Llama 3.2 Vision  ││  │
-│                            │  │ (Fallback - 10% edge cases) ││  │
-│                            │  └─────────────────────────────┘│  │
-│                            └─────────────────────────────────┘  │
-│                                         │                        │
-│                                         ▼                        │
-│                            ┌──────────────────────┐             │
-│                            │   OCI NoSQL / AJD    │             │
-│                            └──────────────────────┘             │
-│                                         │                        │
-│                                         ▼                        │
-│                            ┌──────────────────────┐             │
-│                            │  Oracle Fusion AP    │             │
-│                            │  (Native REST API)   │             │
-│                            └──────────────────────┘             │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│                    Invoice-OCI (Simple)                     │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│  ┌──────────┐    ┌─────────────┐    ┌──────────────────┐  │
+│  │  Upload  │───▶│ OCI GenAI   │───▶│  JSON Result     │  │
+│  │  (PDF)   │    │ Gemini 2.5  │    │  (Fusion-ready)  │  │
+│  │          │    │   Flash     │    │                  │  │
+│  └──────────┘    └─────────────┘    └──────────────────┘  │
+│       │                                      │             │
+│       ▼                                      ▼             │
+│  ┌──────────┐                        ┌──────────────────┐  │
+│  │  Object  │                        │   NoSQL / AJD    │  │
+│  │  Storage │                        │   (metadata)     │  │
+│  └──────────┘                        └──────────────────┘  │
+│                                              │             │
+│                                              ▼             │
+│                                      ┌──────────────────┐  │
+│                                      │  Oracle Fusion   │  │
+│                                      │  AP Interface    │  │
+│                                      └──────────────────┘  │
+└────────────────────────────────────────────────────────────┘
 ```
 
-## Features
+**That's it.** One AI call. No hybrid complexity. Just like the original.
 
-- **Hybrid AI Extraction**: OCI Document Understanding + GenAI Llama 3.2 Vision
-- **Serverless Architecture**: OCI Functions for cost-efficient scaling
-- **Oracle Fusion Ready**: Native AP_INVOICES_INTERFACE format output
-- **Multi-Language Support**: 15+ languages including CJK
-- **Confidence Scoring**: Automatic quality assessment per field
-- **Progressive Web App**: Installable offline-capable frontend
+## Cost Comparison
 
-## Technology Stack
+| Service | Input (1M tokens) | Output (1M tokens) | Source |
+|---------|-------------------|--------------------| -------|
+| AWS Bedrock Claude 3.5 Sonnet | $3.00 | $15.00 | [AWS](https://aws.amazon.com/bedrock/pricing/) |
+| OCI GenAI Gemini 2.5 Flash | ~$0.30 | ~$2.50 | [Google](https://ai.google.dev/gemini-api/docs/pricing)* |
 
-| Component | OCI Service |
-|-----------|-------------|
-| Compute | OCI Functions |
-| Document AI | OCI Document Understanding |
-| Generative AI | OCI GenAI (Llama 3.2 Vision) |
-| Storage | OCI Object Storage |
-| Database | OCI NoSQL Database |
-| API | OCI API Gateway |
-| Queuing | OCI Queue |
-| IaC | OCI Resource Manager (Terraform) |
+*OCI pricing may include markup - verify at [oracle.com/cloud/price-list](https://www.oracle.com/cloud/price-list/)
 
-## Cost Estimate
-
-| Volume | Monthly Cost | Per-Invoice |
-|--------|-------------|-------------|
-| 1,000 | ~$30-50 | $0.03-0.05 |
-| 10,000 | ~$200-350 | $0.02-0.035 |
-| 100,000 | ~$1,500-2,500 | $0.015-0.025 |
+**Potential savings: ~10x on input, ~6x on output**
 
 ## Quick Start
 
 ### Prerequisites
 
-- OCI Tenancy with Document Understanding and Generative AI enabled
+- OCI Tenancy with Generative AI enabled
+- Gemini 2.5 Flash access (available in US Midwest, US West, Japan, India)
 - OCI CLI configured
-- Terraform >= 1.5.0
-- Node.js >= 18 (for functions)
 
-### Deploy Infrastructure
+### Deploy
 
 ```bash
+# 1. Infrastructure
 cd infrastructure/terraform
-terraform init
-terraform plan -var-file="dev.tfvars"
-terraform apply -var-file="dev.tfvars"
-```
+cp example.tfvars dev.tfvars
+# Edit dev.tfvars with your OCIDs
+terraform init && terraform apply -var-file="dev.tfvars"
 
-### Deploy Functions
-
-```bash
+# 2. Functions
 cd functions
 fn deploy --app invoice-oci-dev-app --all
+```
+
+### Test
+
+```bash
+# Upload invoice
+oci os object put -bn invoice-oci-dev-invoices-upload -f sample.pdf
+
+# Trigger extraction (via API Gateway or direct function invoke)
+fn invoke invoice-oci-dev-app invoice-processor < payload.json
 ```
 
 ## Project Structure
 
 ```
 invoice-oci/
-├── infrastructure/
-│   └── terraform/           # OCI Resource Manager templates
 ├── functions/
-│   ├── upload-handler/      # File upload orchestration
-│   ├── document-processor/  # OCI Document Understanding
-│   ├── genai-validator/     # OCI GenAI fallback
-│   └── fusion-transformer/  # Fusion AP format converter
-├── frontend/
-│   └── pwa/                 # Progressive Web App
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── OCI-SETUP.md
-│   └── FUSION-INTEGRATION.md
-└── examples/
-    └── sample-invoices/
+│   ├── invoice-processor/    # Main extraction (Gemini 2.5 Flash)
+│   └── fusion-transformer/   # Fusion AP format converter
+├── infrastructure/
+│   └── terraform/            # OCI IaC
+└── docs/
 ```
 
-## Documentation
+## Alternative: Oracle's Official Solution
 
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- [OCI Setup Guide](docs/OCI-SETUP.md)
-- [Fusion Integration](docs/FUSION-INTEGRATION.md)
-- [Technology Decision](OCI-TECHNOLOGY-DECISION.md)
+Oracle has an official invoice processing pattern using OCI Document Understanding + OIC:
 
-## Contributing
+**[oracle-devrel/technology-engineering/ai/ai-document-understanding/ai-email-invoice](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)**
 
-Contributions welcome! Please read our [Contributing Guide](CONTRIBUTING.md) first.
-
-## License
-
-MIT License - See [LICENSE](LICENSE) for details.
+Consider this if:
+- You're already using Oracle Integration Cloud (OIC)
+- You want traditional ML instead of LLM
+- You need Oracle-supported solution
 
 ## References
 
-- [OCI Document Understanding](https://docs.oracle.com/en-us/iaas/Content/document-understanding/home.htm)
-- [OCI Generative AI Service](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
-- [Original invoice-vNext](https://github.com/gruntemannen/invoice-vNext)
+- [Original invoice-vNext](https://github.com/gruntemannen/invoice-vNext) - AWS/Claude version
+- [OCI Gemini 2.5 Flash Docs](https://docs.oracle.com/en-us/iaas/Content/generative-ai/google-gemini-2-5-flash.htm)
+- [Oracle Price List](https://www.oracle.com/cloud/price-list/) - Verify current pricing
+- [Oracle's Official Invoice Solution](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)
+
+## License
+
+MIT - See [LICENSE](LICENSE)
 
 ---
 
-*Part of the [oci-ai-architects](https://github.com/oci-ai-architects) community*
+*Part of [oci-ai-architects](https://github.com/oci-ai-architects) community*
