@@ -117,7 +117,7 @@ For enterprises using Oracle Integration Cloud:
 
 **[oracle-devrel/technology-engineering/ai-email-invoice](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)**
 
-Uses OCI Document Understanding + OIC instead of GenAI.
+Uses OCI Document Understanding + OIC instead of GenAI, but can be extended with GenAI and provides pre-build connectors to Fusion.
 
 ## References
 
