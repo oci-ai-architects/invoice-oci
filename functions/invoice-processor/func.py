@@ -1,20 +1,10 @@
 """
-OCI GenAI Invoice Processor - Multi-Model Support
+OCI GenAI Invoice Processor
 
-PDF → OCI GenAI (Gemini/Llama) → JSON extraction.
-Supports multiple models - configure via environment variable.
+PDF → OCI GenAI → JSON extraction using Gemini 2.5 Flash.
+Adapts the invoice-vNext pattern for Oracle Cloud Infrastructure.
 
-SUPPORTED MODELS (set GENAI_MODEL_ID):
-- google.gemini-2.5-flash      (default) - Best price/performance, $0.0375/1M input
-- google.gemini-2.5-flash-lite           - Same price, faster, simpler invoices
-- google.gemini-2.5-pro                  - Complex invoices, $0.075/1M input
-- meta.llama-3.2-90b-vision              - Open-source alternative
-- meta.llama-4-maverick                  - Latest Llama, agentic workflows
-
-ARCHITECTURE: Simple single-model approach
-- Original invoice-vNext: PDF → Claude 3.5 Sonnet → JSON
-- This version: PDF → OCI GenAI (configurable) → JSON
-- 80x cheaper than AWS Bedrock for Gemini Flash
+Reference: https://github.com/gruntemannen/invoice-vNext
 """
 
 import base64
@@ -27,23 +17,13 @@ from datetime import datetime
 import oci
 from fdk import response
 
-# =============================================================================
-# MODEL CONFIGURATION
-# =============================================================================
-# Change GENAI_MODEL_ID to switch models. Pricing (as of 2026-02):
-#   - google.gemini-2.5-flash:      $0.0375/1M input, $0.15/1M output (RECOMMENDED)
-#   - google.gemini-2.5-flash-lite: $0.0375/1M input, $0.15/1M output
-#   - google.gemini-2.5-pro:        $0.075/1M input,  $0.30/1M output
-#   - meta.llama-3.2-90b-vision:    $0.60/10K chars (transaction-based)
-#   - meta.llama-4-maverick:        $0.75/10K chars (transaction-based)
-# =============================================================================
-
+# Configuration
 GENAI_ENDPOINT = os.environ.get(
     "GENAI_ENDPOINT",
     "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com"
 )
 
-# Default: Gemini 2.5 Flash - best balance of cost and quality
+# Gemini 2.5 Flash - multimodal, supports PDF/image input
 MODEL_ID = os.environ.get("GENAI_MODEL_ID", "google.gemini-2.5-flash")
 UPLOAD_BUCKET = os.environ.get("UPLOAD_BUCKET")
 COMPARTMENT_OCID = os.environ.get("COMPARTMENT_OCID")
