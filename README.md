@@ -49,7 +49,7 @@ PDF → OCI GenAI (Gemini 2.5 Flash) → JSON → Oracle Fusion AP
 ### Prerequisites
 
 - OCI Tenancy with Generative AI enabled
-- Gemini 2.5 Flash access (US-Chicago, US-Phoenix, Japan, India)
+- Gemini 2.5 Flash access (US-Chicago, US-Phoenix, Frankfurt)
 - OCI CLI configured
 - Terraform >= 1.5
 
