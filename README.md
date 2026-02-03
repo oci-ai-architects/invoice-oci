@@ -14,17 +14,6 @@ OCI-native invoice extraction adapted from [invoice-vNext](https://github.com/gr
 PDF → OCI GenAI (Gemini 2.5 Flash) → JSON → Oracle Fusion AP
 ```
 
-## Status
-
-| Component | Status |
-|-----------|--------|
-| Architecture | ✅ Designed |
-| Terraform | ✅ Written |
-| Functions | ✅ Written |
-| Testing | ⚠️ Not tested on OCI |
-| Production | ❌ Not production-ready |
-
-**This is a reference architecture, not production code.**
 
 ## Pricing
 
@@ -116,6 +105,19 @@ For enterprises using Oracle Integration Cloud:
 [oracle-devrel/technology-engineering/ai-email-invoice](https://github.com/oracle-devrel/technology-engineering/tree/main/ai/ai-document-understanding/ai-email-invoice)
 
 Uses OCI Document Understanding + OIC instead of GenAI, but can be extended with GenAI and provides pre-build connectors to Fusion.
+
+
+## Status
+
+| Component | Status |
+|-----------|--------|
+| Architecture | ✅ Designed |
+| Terraform | ✅ Written |
+| Functions | ✅ Written |
+| Testing | ⚠️ Not tested on OCI |
+| Production | ❌ Not production-ready |
+
+**This is a reference architecture, not production code.**
 
 ## References
 
