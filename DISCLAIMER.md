@@ -2,11 +2,13 @@
 
 ## Status
 
-This repository contains **personal educational content** created by an Oracle employee.
+Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
+
+This repository contains **personal educational content** published as an independent community project.
 
 | Aspect | Status |
 |--------|--------|
-| **Author** | Oracle Employee (personal capacity) |
+| **Author** | Independent community contributor |
 | **Review Status** | Not officially reviewed by Oracle |
 | **Support** | Community only, no official support |
 | **Purpose** | Reference architecture for learning |
@@ -30,16 +32,16 @@ This repository contains **personal educational content** created by an Oracle e
 ## Intellectual Property
 
 - Original code represents personal work
-- Oracle, OCI, Fusion are trademarks of Oracle Corporation
+- Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
 - No official Oracle logos or brand marks are used
 
-## Co-Created With AI
+## AI assistance
 
-Developed in collaboration with **Starlight Architect** (AI architecture partner).
+Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author.
 
 ## License
 
-MIT License - See [LICENSE](LICENSE)
+MIT. See [LICENSE](LICENSE).
 
 ---
 

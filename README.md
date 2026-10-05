@@ -1,6 +1,8 @@
 # Invoice-OCI
 
 > **AI-Powered Invoice Extraction on Oracle Cloud Infrastructure**
+>
+> Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![OCI GenAI](https://img.shields.io/badge/OCI-Generative%20AI-C74634)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
@@ -257,13 +259,13 @@ This project adapts the invoice extraction pattern from [gruntemannen/invoice-vN
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT. See [LICENSE](LICENSE).
 
 ---
 
-> Personal educational content by an Oracle employee. Not officially reviewed or supported by Oracle.
+> Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
 > See [DISCLAIMER.md](DISCLAIMER.md)
 
 ---
 
-<sub>Architecture by AI Center of Excellence | Co-created with Starlight Architect</sub>
+<sub>Independent community project. Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author.</sub>
