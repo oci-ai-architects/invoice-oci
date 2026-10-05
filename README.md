@@ -268,4 +268,4 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
-<sub>Independent community project. Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author. It is a tool, not a co-author, partner or organisation.</sub>
+<sub>Independent community project. Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author. The author is the sole author of this repository.</sub>
