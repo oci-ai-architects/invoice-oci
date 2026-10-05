@@ -259,13 +259,13 @@ This project adapts the invoice extraction pattern from [gruntemannen/invoice-vN
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT. See [LICENSE](LICENSE).
 
 ---
 
-> Unofficial community project by an independent author. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle, OCI, Fusion and related marks are trademarks of Oracle Corporation.
+> Unofficial community project by an independent author. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
 > See [DISCLAIMER.md](DISCLAIMER.md)
 
 ---
 
-<sub>Independent community project | Co-created with Starlight Architect</sub>
+<sub>Independent community project. Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author. It is a tool, not a co-author, partner or organisation.</sub>
