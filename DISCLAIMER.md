@@ -2,13 +2,13 @@
 
 ## Status
 
-Unofficial community project. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
+Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
 
-This repository contains **personal educational content** by an independent author with no affiliation to Oracle.
+This repository contains **personal educational content** published as an independent community project.
 
 | Aspect | Status |
 |--------|--------|
-| **Author** | Independent community contributor, not affiliated with Oracle |
+| **Author** | Independent community contributor |
 | **Review Status** | Not officially reviewed by Oracle |
 | **Support** | Community only, no official support |
 | **Purpose** | Reference architecture for learning |

@@ -2,7 +2,7 @@
 
 > **AI-Powered Invoice Extraction on Oracle Cloud Infrastructure**
 >
-> Unofficial community project. Not affiliated with, endorsed by, or sponsored by Oracle Corporation.
+> Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![OCI GenAI](https://img.shields.io/badge/OCI-Generative%20AI-C74634)](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
@@ -263,7 +263,7 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
-> Unofficial community project by an independent author. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
+> Unofficial community project. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. Other names are marks of their respective owners.
 > See [DISCLAIMER.md](DISCLAIMER.md)
 
 ---
