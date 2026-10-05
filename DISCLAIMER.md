@@ -2,11 +2,13 @@
 
 ## Status
 
-This repository contains **personal educational content** created by an Oracle employee.
+Unofficial community project. Not affiliated with, endorsed by, or sponsored by Oracle Corporation. Oracle, OCI, Fusion and related marks are trademarks of Oracle Corporation.
+
+This repository contains **personal educational content** by an independent author with no affiliation to Oracle.
 
 | Aspect | Status |
 |--------|--------|
-| **Author** | Oracle Employee (personal capacity) |
+| **Author** | Independent community contributor, not affiliated with Oracle |
 | **Review Status** | Not officially reviewed by Oracle |
 | **Support** | Community only, no official support |
 | **Purpose** | Reference architecture for learning |
