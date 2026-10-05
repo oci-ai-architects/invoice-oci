@@ -37,7 +37,7 @@ This repository contains **personal educational content** by an independent auth
 
 ## AI assistance
 
-Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author. The author is the sole author of this repository.
+Drafted with AI assistance from Starlight Architect, a personal Claude Code command written by the author.
 
 ## License
 
